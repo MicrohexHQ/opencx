@@ -13,6 +13,7 @@ import (
 	"github.com/mit-dci/opencx/cxauctionrpc"
 	"github.com/mit-dci/opencx/cxauctionserver"
 	"github.com/mit-dci/opencx/cxdb"
+	"github.com/mit-dci/opencx/cxdb/cxdbmemory"
 	"github.com/mit-dci/opencx/cxdb/cxdbsql"
 	"github.com/mit-dci/opencx/logging"
 	"github.com/mit-dci/opencx/match"
@@ -143,7 +144,7 @@ func main() {
 	}
 
 	var puzzleStores map[match.Pair]cxdb.PuzzleStore
-	if puzzleStores, err = cxdbsql.CreatePuzzleStoreMap(pairList); err != nil {
+	if puzzleStores, err = cxdbmemory.CreatePuzzleStoreMap(pairList); err != nil {
 		logging.Fatalf("Error creating puzzle store map: %s", err)
 	}
 
