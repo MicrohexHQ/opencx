@@ -321,10 +321,10 @@ func TestTenMillion2048A2(t *testing.T) {
 	return
 }
 
-func BenchmarkHundredMillion2048A2(b *testing.B) {
-	createSolveBench2048A2(100000000, b)
-	return
-}
+// func BenchmarkHundredMillion2048A2(b *testing.B) {
+// 	createSolveBench2048A2(100000000, b)
+// 	return
+// }
 
 // func BenchmarkMemoryBreak2048A2(b *testing.B) {
 // 	createSolveBench2048A2(50000000000, b)
@@ -336,10 +336,30 @@ func TestConcurrentMillion2048A2(t *testing.T) {
 	return
 }
 
-func BenchmarkConcurrentManyMillions2048A2(b *testing.B) {
-	createSolveConcurrentNBench(10000000, runtime.NumCPU(), b)
-	return
+func TestConcurrentTwentyFiveThousand2048A2(t *testing.T) {
+	thirtytwolist := make([]uint64, 32)
+	for i := range thirtytwolist {
+		t.Run(fmt.Sprintf("CreateSolveConcurrent%d", i+1), func(t *testing.T) {
+			createSolveConcurrentN(25000, i+1, t)
+		})
+	}
 }
+
+func BenchmarkConcurrentHundredThousand2048A2(b *testing.B) {
+	thirtytwolist := make([]uint64, 64)
+	for i := range thirtytwolist {
+		b.Run(fmt.Sprintf("CreateSolveConcurrent%d", i+1), func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				createSolveConcurrentNBench(100000, i+1, b)
+			}
+		})
+	}
+}
+
+// func BenchmarkConcurrentManyMillions2048A2(b *testing.B) {
+// 	createSolveConcurrentNBench(10000000, runtime.NumCPU(), b)
+// 	return
+// }
 
 // 4748 0975 4727 2012 8661 7503 4130 6167 7388 5051 2607 4492 0056 4448 6710
 // 6196 3607 1042 4558 1476 5425 2707 6049 4101 2311 7758 9201 2567 5790 6462

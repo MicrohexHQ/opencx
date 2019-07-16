@@ -4,11 +4,6 @@ import (
 	"bytes"
 	"crypto/sha256"
 	"testing"
-
-	"github.com/btcsuite/fastsha256"
-	"github.com/dchest/siphash"
-	"github.com/minio/highwayhash"
-	"golang.org/x/crypto/blake2b"
 )
 
 // TestZeroTimeSHA256 is a very useful test
@@ -200,133 +195,133 @@ func TestTenMillionTimeSHA256(t *testing.T) {
 	}
 }
 
-func BenchmarkHundredMillionTimeSHA256(b *testing.B) {
-	seed := make([]byte, 32)
-	copy(seed[:], []byte("opencxhundredmillion"))
-	hashFunction := sha256.New()
-	hashPuzzle := New(seed, hashFunction)
-	time := uint64(100000000)
-	puzzle, expectedAns, err := hashPuzzle.SetupTimelockPuzzle(time)
-	if err != nil {
-		b.Fatalf("There was an error setting up the timelock puzzle: %s\n", err)
-	}
-	puzzleAns, err := puzzle.Solve()
-	if err != nil {
-		b.Fatalf("Error solving puzzle: %s\n", err)
-	}
-	if !bytes.Equal(puzzleAns, expectedAns) {
-		b.Fatalf("Answer did not equal puzzle for time = %d. Expected %x, got %x\n", time, expectedAns, puzzleAns)
-	}
-}
+// func BenchmarkHundredMillionTimeSHA256(b *testing.B) {
+// 	seed := make([]byte, 32)
+// 	copy(seed[:], []byte("opencxhundredmillion"))
+// 	hashFunction := sha256.New()
+// 	hashPuzzle := New(seed, hashFunction)
+// 	time := uint64(100000000)
+// 	puzzle, expectedAns, err := hashPuzzle.SetupTimelockPuzzle(time)
+// 	if err != nil {
+// 		b.Fatalf("There was an error setting up the timelock puzzle: %s\n", err)
+// 	}
+// 	puzzleAns, err := puzzle.Solve()
+// 	if err != nil {
+// 		b.Fatalf("Error solving puzzle: %s\n", err)
+// 	}
+// 	if !bytes.Equal(puzzleAns, expectedAns) {
+// 		b.Fatalf("Answer did not equal puzzle for time = %d. Expected %x, got %x\n", time, expectedAns, puzzleAns)
+// 	}
+// }
 
-// Doing this to see how much a better algo makes a difference (figure out if the bottleneck is Read/Write speed)
-func BenchmarkHundredMillionTimeFastSHA256(b *testing.B) {
-	seed := make([]byte, 32)
-	copy(seed[:], []byte("opencxhundredmillion"))
-	hashFunction := fastsha256.New()
-	hashPuzzle := New(seed, hashFunction)
-	time := uint64(100000000)
-	puzzle, expectedAns, err := hashPuzzle.SetupTimelockPuzzle(time)
-	if err != nil {
-		b.Fatalf("There was an error setting up the timelock puzzle: %s\n", err)
-	}
-	puzzleAns, err := puzzle.Solve()
-	if err != nil {
-		b.Fatalf("Error solving puzzle: %s\n", err)
-	}
-	if !bytes.Equal(puzzleAns, expectedAns) {
-		b.Fatalf("Answer did not equal puzzle for time = %d. Expected %x, got %x\n", time, expectedAns, puzzleAns)
-	}
-}
+// // Doing this to see how much a better algo makes a difference (figure out if the bottleneck is Read/Write speed)
+// func BenchmarkHundredMillionTimeFastSHA256(b *testing.B) {
+// 	seed := make([]byte, 32)
+// 	copy(seed[:], []byte("opencxhundredmillion"))
+// 	hashFunction := fastsha256.New()
+// 	hashPuzzle := New(seed, hashFunction)
+// 	time := uint64(100000000)
+// 	puzzle, expectedAns, err := hashPuzzle.SetupTimelockPuzzle(time)
+// 	if err != nil {
+// 		b.Fatalf("There was an error setting up the timelock puzzle: %s\n", err)
+// 	}
+// 	puzzleAns, err := puzzle.Solve()
+// 	if err != nil {
+// 		b.Fatalf("Error solving puzzle: %s\n", err)
+// 	}
+// 	if !bytes.Equal(puzzleAns, expectedAns) {
+// 		b.Fatalf("Answer did not equal puzzle for time = %d. Expected %x, got %x\n", time, expectedAns, puzzleAns)
+// 	}
+// }
 
-// lol it's slower than crypto/sha256???
+// // lol it's slower than crypto/sha256???
 
-// Blake2B is cool
-func BenchmarkHundredMillionTimeBlake2B(b *testing.B) {
-	seed := make([]byte, 32)
-	copy(seed[:], []byte("opencxhundredmillion"))
-	hashFunction, err := blake2b.New256(nil)
-	if err != nil {
-		b.Fatalf("Could not set up blake2b: %s\n", err)
-	}
-	hashPuzzle := New(seed, hashFunction)
-	time := uint64(100000000)
-	puzzle, expectedAns, err := hashPuzzle.SetupTimelockPuzzle(time)
-	if err != nil {
-		b.Fatalf("There was an error setting up the timelock puzzle: %s\n", err)
-	}
-	puzzleAns, err := puzzle.Solve()
-	if err != nil {
-		b.Fatalf("Error solving puzzle: %s\n", err)
-	}
-	if !bytes.Equal(puzzleAns, expectedAns) {
-		b.Fatalf("Answer did not equal puzzle for time = %d. Expected %x, got %x\n", time, expectedAns, puzzleAns)
-	}
-}
+// // Blake2B is cool
+// func BenchmarkHundredMillionTimeBlake2B(b *testing.B) {
+// 	seed := make([]byte, 32)
+// 	copy(seed[:], []byte("opencxhundredmillion"))
+// 	hashFunction, err := blake2b.New256(nil)
+// 	if err != nil {
+// 		b.Fatalf("Could not set up blake2b: %s\n", err)
+// 	}
+// 	hashPuzzle := New(seed, hashFunction)
+// 	time := uint64(100000000)
+// 	puzzle, expectedAns, err := hashPuzzle.SetupTimelockPuzzle(time)
+// 	if err != nil {
+// 		b.Fatalf("There was an error setting up the timelock puzzle: %s\n", err)
+// 	}
+// 	puzzleAns, err := puzzle.Solve()
+// 	if err != nil {
+// 		b.Fatalf("Error solving puzzle: %s\n", err)
+// 	}
+// 	if !bytes.Equal(puzzleAns, expectedAns) {
+// 		b.Fatalf("Answer did not equal puzzle for time = %d. Expected %x, got %x\n", time, expectedAns, puzzleAns)
+// 	}
+// }
 
-// Now let's see, siphash is supposed to be fast
-func BenchmarkHundredMillionTimeSipHash(b *testing.B) {
-	seed := make([]byte, 32)
-	copy(seed[:], []byte("opencxhundredmillion"))
-	hashFunction := siphash.New(seed)
-	hashPuzzle := New(seed, hashFunction)
-	time := uint64(100000000)
-	puzzle, expectedAns, err := hashPuzzle.SetupTimelockPuzzle(time)
-	if err != nil {
-		b.Fatalf("There was an error setting up the timelock puzzle: %s\n", err)
-	}
-	puzzleAns, err := puzzle.Solve()
-	if err != nil {
-		b.Fatalf("Error solving puzzle: %s\n", err)
-	}
-	if !bytes.Equal(puzzleAns, expectedAns) {
-		b.Fatalf("Answer did not equal puzzle for time = %d. Expected %x, got %x\n", time, expectedAns, puzzleAns)
-	}
-}
+// // Now let's see, siphash is supposed to be fast
+// func BenchmarkHundredMillionTimeSipHash(b *testing.B) {
+// 	seed := make([]byte, 32)
+// 	copy(seed[:], []byte("opencxhundredmillion"))
+// 	hashFunction := siphash.New(seed)
+// 	hashPuzzle := New(seed, hashFunction)
+// 	time := uint64(100000000)
+// 	puzzle, expectedAns, err := hashPuzzle.SetupTimelockPuzzle(time)
+// 	if err != nil {
+// 		b.Fatalf("There was an error setting up the timelock puzzle: %s\n", err)
+// 	}
+// 	puzzleAns, err := puzzle.Solve()
+// 	if err != nil {
+// 		b.Fatalf("Error solving puzzle: %s\n", err)
+// 	}
+// 	if !bytes.Equal(puzzleAns, expectedAns) {
+// 		b.Fatalf("Answer did not equal puzzle for time = %d. Expected %x, got %x\n", time, expectedAns, puzzleAns)
+// 	}
+// }
 
-// Now let's see, highwayhash is supposed to be faster
-func BenchmarkHundredMillionTimeHighwayHash(b *testing.B) {
-	seed := make([]byte, 32)
-	copy(seed[:], []byte("opencxhundredmillion"))
-	hashFunction, err := highwayhash.New(seed)
-	if err != nil {
-		b.Fatalf("Could not create highwayhash: %s\n", err)
-	}
-	hashPuzzle := New(seed, hashFunction)
-	time := uint64(100000000)
-	puzzle, expectedAns, err := hashPuzzle.SetupTimelockPuzzle(time)
-	if err != nil {
-		b.Fatalf("There was an error setting up the timelock puzzle: %s\n", err)
-	}
-	puzzleAns, err := puzzle.Solve()
-	if err != nil {
-		b.Fatalf("Error solving puzzle: %s\n", err)
-	}
-	if !bytes.Equal(puzzleAns, expectedAns) {
-		b.Fatalf("Answer did not equal puzzle for time = %d. Expected %x, got %x\n", time, expectedAns, puzzleAns)
-	}
-}
+// // Now let's see, highwayhash is supposed to be faster
+// func BenchmarkHundredMillionTimeHighwayHash(b *testing.B) {
+// 	seed := make([]byte, 32)
+// 	copy(seed[:], []byte("opencxhundredmillion"))
+// 	hashFunction, err := highwayhash.New(seed)
+// 	if err != nil {
+// 		b.Fatalf("Could not create highwayhash: %s\n", err)
+// 	}
+// 	hashPuzzle := New(seed, hashFunction)
+// 	time := uint64(100000000)
+// 	puzzle, expectedAns, err := hashPuzzle.SetupTimelockPuzzle(time)
+// 	if err != nil {
+// 		b.Fatalf("There was an error setting up the timelock puzzle: %s\n", err)
+// 	}
+// 	puzzleAns, err := puzzle.Solve()
+// 	if err != nil {
+// 		b.Fatalf("Error solving puzzle: %s\n", err)
+// 	}
+// 	if !bytes.Equal(puzzleAns, expectedAns) {
+// 		b.Fatalf("Answer did not equal puzzle for time = %d. Expected %x, got %x\n", time, expectedAns, puzzleAns)
+// 	}
+// }
 
-// BenchmarkBillionTimeSHA256 is even more fun, but we can't run it because we need the time to be > 10 minutes
-func BenchmarkBillionTimeSHA256(b *testing.B) {
-	seed := make([]byte, 32)
-	copy(seed[:], []byte("opencxbillion"))
-	hashFunction := sha256.New()
-	hashPuzzle := New(seed, hashFunction)
-	time := uint64(1000000000)
+// // BenchmarkBillionTimeSHA256 is even more fun, but we can't run it because we need the time to be > 10 minutes
+// func BenchmarkBillionTimeSHA256(b *testing.B) {
+// 	seed := make([]byte, 32)
+// 	copy(seed[:], []byte("opencxbillion"))
+// 	hashFunction := sha256.New()
+// 	hashPuzzle := New(seed, hashFunction)
+// 	time := uint64(1000000000)
 
-	// so we solve it once here, this can take some time
-	puzzle, expectedAns, err := hashPuzzle.SetupTimelockPuzzle(time)
-	if err != nil {
-		b.Fatalf("There was an error setting up the timelock puzzle: %s\n", err)
-	}
+// 	// so we solve it once here, this can take some time
+// 	puzzle, expectedAns, err := hashPuzzle.SetupTimelockPuzzle(time)
+// 	if err != nil {
+// 		b.Fatalf("There was an error setting up the timelock puzzle: %s\n", err)
+// 	}
 
-	// now we do the exact same thing all over again lol
-	puzzleAns, err := puzzle.Solve()
-	if err != nil {
-		b.Fatalf("Error solving puzzle: %s\n", err)
-	}
-	if !bytes.Equal(puzzleAns, expectedAns) {
-		b.Fatalf("Answer did not equal puzzle for time = 0. Expected %x, got %x\n", expectedAns, puzzleAns)
-	}
-}
+// 	// now we do the exact same thing all over again lol
+// 	puzzleAns, err := puzzle.Solve()
+// 	if err != nil {
+// 		b.Fatalf("Error solving puzzle: %s\n", err)
+// 	}
+// 	if !bytes.Equal(puzzleAns, expectedAns) {
+// 		b.Fatalf("Answer did not equal puzzle for time = 0. Expected %x, got %x\n", expectedAns, puzzleAns)
+// 	}
+// }

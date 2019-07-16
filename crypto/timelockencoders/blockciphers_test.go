@@ -89,26 +89,26 @@ func TestRSWRC5ManyN8_T1000000(t *testing.T) {
 	return
 }
 
-// BenchmarkRSWRC5ManyN8_T5000000 tests 8 concurrent orders with a 5000000 time to solve
-func BenchmarkRSWRC5ManyN8_T5000000(b *testing.B) {
-	solveRSWRC5ConcurrentBench(uint64(5000000), uint64(8), b)
-	return
-}
+// // BenchmarkRSWRC5ManyN8_T5000000 tests 8 concurrent orders with a 5000000 time to solve
+// func BenchmarkRSWRC5ManyN8_T5000000(b *testing.B) {
+// 	solveRSWRC5ConcurrentBench(uint64(5000000), uint64(8), b)
+// 	return
+// }
 
-// BenchmarkRSWRC5ManyN8_T1000000000 tests 8 concurrent orders with a 1000000000 time to solve
-// This should take 40-50 minutes on an i7 6700k with 4 cores and 8 threads.
-func BenchmarkRSWRC5ManyN8_T1000000000(b *testing.B) {
-	solveRSWRC5ConcurrentBench(uint64(1000000000), uint64(8), b)
-	return
-}
+// // BenchmarkRSWRC5ManyN8_T1000000000 tests 8 concurrent orders with a 1000000000 time to solve
+// // This should take 40-50 minutes on an i7 6700k with 4 cores and 8 threads.
+// func BenchmarkRSWRC5ManyN8_T1000000000(b *testing.B) {
+// 	solveRSWRC5ConcurrentBench(uint64(1000000000), uint64(8), b)
+// 	return
+// }
 
-// BenchmarkRSWRC5ManyN8_T50000000000 should be a good benchmark for the memory, concurrency, and time
-// limits. You need a lot of ram for this, and this will probably take 4 hours on an i7 6700k with 4
-// cores and 8 threads.
-func BenchmarkRSWRC5ManyN8_T50000000000(b *testing.B) {
-	solveRSWRC5ConcurrentBench(uint64(5000000000), uint64(8), b)
-	return
-}
+// // BenchmarkRSWRC5ManyN8_T50000000000 should be a good benchmark for the memory, concurrency, and time
+// // limits. You need a lot of ram for this, and this will probably take 4 hours on an i7 6700k with 4
+// // cores and 8 threads.
+// func BenchmarkRSWRC5ManyN8_T50000000000(b *testing.B) {
+// 	solveRSWRC5ConcurrentBench(uint64(5000000000), uint64(8), b)
+// 	return
+// }
 
 func solveRSWRC5ConcurrentBench(timeToSolve uint64, howMany uint64, b *testing.B) {
 	resChan := make(chan bool, howMany)
